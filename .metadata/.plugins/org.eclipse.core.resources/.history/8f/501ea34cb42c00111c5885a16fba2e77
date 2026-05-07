@@ -1,0 +1,122 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>    
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Nature flower and dogs</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+<img src="../images/OIP.jpg" alt="dog" width="100%" height="250px">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Logo</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:8080/client/clientindex">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="bookingandsalesdetails">Booking and Sales Details</a>
+        </li>
+        <li>
+         <a class="nav-link" href="logoutsession">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div>
+</div>
+<div class="container">
+
+
+            <form action="/adddb" method="post">
+            <div style="text-align: center;">
+              <h1> 
+                 Booking and Sales Details </h1>  
+              
+                
+                      <div style="padding: 10px;">
+                      <label>Id:</label>
+                      <input type="text" name="id"> 
+                  </div>
+                  <div style="padding: 10px;">
+                      <label>Client Email:</label>
+                      <input type="email" name="email"> 
+                  </div>
+                  <div style="padding: 10px;">
+                      <label>Mobile:</label>
+                      <input type="number" name="mobile" > 
+                  </div>
+                  <div style="padding: 10px;">
+                      <label>Title:</label>
+                      <input type="text" name="title"> 
+                  </div>
+                  <div style="padding: 10px;">
+                      <label>Name of the Sales Details:</label>
+                      <input type="text" name="salesdetails" > 
+                  </div>
+                  <div style="padding: 10px;">
+                      <label>Needed Count:</label>
+                      <input type="number" name="neededcount" > 
+                  </div>
+                  <div style="padding: 10px;">
+                      <label>Price:</label>
+                      <input type="number" name="price:]"> 
+                  </div>
+                  <div style="padding: 10px;">
+                      <label>Offer Price:</label>
+                      <input type="number" name="offerprice"> 
+                  </div>
+                  <div style="padding: 10px;">
+                      <label>Total Price:</label>
+                      <input type="number" name="totalprice"> 
+                  </div>
+                  
+
+                      
+                      <div style="padding: 10px;">
+                  <button class="btn btn-primary">Confirm your Oder</button>
+                      </div>
+
+       
+        </div> 
+
+
+            </form>
+          </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

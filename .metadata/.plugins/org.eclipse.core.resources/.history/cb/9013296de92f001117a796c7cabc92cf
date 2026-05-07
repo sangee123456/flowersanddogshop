@@ -1,0 +1,507 @@
+package com.natural.FlowersofNatureandFriendlyAnimals.contoller;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import com.natural.FlowersofNatureandFriendlyAnimals.booking.Booked;
+import com.natural.FlowersofNatureandFriendlyAnimals.bookrepository.BookSalesRepo;
+import com.natural.FlowersofNatureandFriendlyAnimals.export.BookedDataExcelExport;
+import com.natural.FlowersofNatureandFriendlyAnimals.model.ClientRegister;
+import com.natural.FlowersofNatureandFriendlyAnimals.repo.BookedRepo;
+import com.natural.FlowersofNatureandFriendlyAnimals.repository.ClientRepo;
+import com.natural.FlowersofNatureandFriendlyAnimals.sales.BookSalesDetails;
+
+@Controller
+public class MyContoller {
+
+	@Autowired
+	ClientRepo clientrepo;
+	
+	@Autowired
+	 BookSalesRepo booksalesrepo;
+	
+	@Autowired
+	 BookedRepo bookedRepo;
+	
+	 @Autowired
+     JavaMailSender javamailsender;
+	
+    @RequestMapping("index")//url
+    public ModelAndView index(Model model) //function name
+    {
+    	
+    	List<BookSalesDetails> obj=booksalesrepo.findAll();
+       model.addAttribute("sales",obj);
+ 	   return new ModelAndView("index"); // file name
+    } 
+    
+   
+    @RequestMapping("brand")//url
+    public ModelAndView brand(HttpServletRequest req,HttpSession ses,Model model) //function name
+    {
+    	String urlid=req.getParameter("urlid").toString();
+    	List<BookSalesDetails> obj=booksalesrepo.selectByProductId(Integer.parseInt(urlid));//this select in repo selectByProductId
+        model.addAttribute("sales",obj);
+    	ses.setAttribute("urlid", urlid);
+  	 
+ 	return new ModelAndView("brand"); // file name
+    }
+    
+    
+    
+    @RequestMapping("client/brand")//url
+    public ModelAndView clientbrand(HttpServletRequest req,HttpSession ses,Model model) //function name
+    {
+    	String urlid=req.getParameter("urlid").toString();
+    	List<BookSalesDetails> obj=booksalesrepo.selectByProductId(Integer.parseInt(urlid));//this select in repo selectByProductId
+        model.addAttribute("sales",obj);
+    	ses.setAttribute("urlid", urlid);
+  	 
+ 	return new ModelAndView("client/brand"); // file name
+    }
+
+
+   @RequestMapping("client/bookingandsalesdetails")//url
+    public ModelAndView clientbookingandsalesdetails(HttpServletRequest req,HttpSession ses,Model model) //function name
+     {
+    	
+    	String email= ses.getAttribute("email").toString();
+    	
+        List<Booked> obj= bookedRepo.selectByEmail(email);
+        model.addAttribute("sales",obj);
+ 	 
+       return new ModelAndView("client/bookingandsalesdetails"); // file name
+     }
+   
+   
+  
+    
+
+   @RequestMapping("client/forbookingcancle")//url
+   public String forbookingcancle(HttpSession ses, HttpServletRequest req,Model model) //function name
+   {
+	   String bookingid=req.getParameter("bookingid").toString();
+	   String action=req.getParameter("action").toString();
+	   String email= ses.getAttribute("email").toString();
+	   if(action.equals("booked") || action.equals("Packed") )
+	   {
+		   bookedRepo.deletebookingid(Integer.parseInt(bookingid));
+		   return "redirect:bookingandsalesdetails"; 
+	   }
+   	
+	 
+	   return "redirect:bookingandsalesdetails"; // file name 
+      } 
+
+ 
+    
+    
+    @RequestMapping("branddetail")//url
+    public ModelAndView branddetail() //function name
+    {
+ 	return new ModelAndView("branddetail"); // file name
+    } 
+
+    
+    
+    
+    
+    @RequestMapping("add")//url
+    public ModelAndView add() //function name
+    {
+ 	return new ModelAndView("addclient"); // file name
+    }
+    
+
+    
+    
+   
+ @RequestMapping("adddb")
+ public String adddb(HttpServletRequest rqu, HttpSession ses) 
+   {
+	  String name=rqu.getParameter("name").toString();
+	  String number=rqu.getParameter("number").toString();
+	  String email=rqu.getParameter("email").toString();
+	  String location=rqu.getParameter("location").toString();
+	  String subject=rqu.getParameter("subject").toString();
+	  String description=rqu.getParameter("description").toString();
+	  String address=rqu.getParameter("address").toString();
+	  
+	  /*ses.setAttribute("NAME",name);
+	  ses.setAttribute("NUMBER",number);
+	  ses.setAttribute("EMAIL",email);
+	  ses.setAttribute("LOCATION",location);
+	  ses.setAttribute("SUBJECT",subject);
+	  ses.setAttribute("DESCRIPTION",description);
+	  ses.setAttribute("ADDRESS",address);*/
+	   
+	  ClientRegister reg= new ClientRegister();
+	  reg.setName(name);
+	  reg.setNumber(number);
+	  reg.setEmail(email);
+	  reg.setLocation(location);
+	  reg.setSubject(subject);
+	  reg.setDescription(description);
+	  reg.setAddress(address);
+	  clientrepo.save(reg);
+	  return "redirect:/clientlogin";
+	  
+}  
+
+ 
+ 
+ 
+ /*@RequestMapping("addcliectdb")
+ public ModelAndView addcliectdb() 
+ 
+ {
+	return new ModelAndView("addcliectdb"); 
+ } */
+ 
+ 
+ 
+ 
+ 
+@RequestMapping("adminlogin")
+public ModelAndView adminlogin() 
+
+{
+	return new ModelAndView("adminlogin"); 
+}
+
+
+
+
+@RequestMapping("checkadmin")
+public String checkadmin(HttpServletRequest rqu) {
+	  String name=rqu.getParameter("name").toString();
+	  String password=rqu.getParameter("pwd").toString();
+	  
+	  if(name.equals("admin") && password.equals("123")) {
+		return "redirect:/admin/adminindex";  
+		  
+	  }
+	  else {
+		  return "redirect:/adminlogin"; 
+
+	  }
+}
+
+
+
+
+
+
+@RequestMapping("admin/adminindex")
+public ModelAndView admiindex() 
+{
+	return new ModelAndView("admin/adminindex"); 
+}
+
+
+
+
+
+@RequestMapping("admin/clientdetails")
+public ModelAndView clientdetails(Model model) 
+{
+	List<ClientRegister> obj=clientrepo.findAll();
+	model.addAttribute("client",obj);
+	return new ModelAndView("admin/clientdetails"); 
+}
+
+
+@RequestMapping("admin/salesproductdetails")
+public ModelAndView salesproductdetails(Model model) 
+{
+	List<BookSalesDetails> obj=booksalesrepo.findAll();
+	model.addAttribute("sales",obj);
+	return new ModelAndView("admin/salesproductdetails"); 
+}
+
+
+
+
+
+@RequestMapping("clientlogin")
+public ModelAndView clientlogin() 
+{
+	return new ModelAndView("clientlogin"); 
+}
+
+
+
+@RequestMapping("clientcheck")
+public String clientcheck(HttpServletRequest rqu,HttpSession ses) {
+	  String email=rqu.getParameter("email").toString();
+	  String mobile=rqu.getParameter("mobile").toString();
+	  
+	 
+	  ClientRegister result=clientrepo.findByEmailMobile(email, mobile);
+	  if(result!=null) {
+		     ses.setAttribute("email",email);
+		     ses.setAttribute("mobile",mobile);
+			return "redirect:/client/clientindex";  
+			  
+		  }
+		  else {
+			  return "redirect:/clientlogin"; 
+
+		  }
+	 
+}
+
+
+
+
+@RequestMapping("client/clientindex")
+public ModelAndView clientindex(Model model) 
+{
+	List<BookSalesDetails> obj=booksalesrepo.findAll();
+	   model.addAttribute("sales",obj);
+
+	return new ModelAndView("client/clientindex"); 
+}
+
+
+@RequestMapping("client/logoutsession")
+public String logoutsession(HttpSession ses) 
+{
+	ses.removeAttribute("email");
+	return "redirect:/clientlogin"; 
+}
+
+
+@RequestMapping("client/orderitem")
+public String orderitem(HttpSession ses,HttpServletRequest req) 
+{
+	String email=req.getParameter("email").toString();
+	String mobile=req.getParameter("mobile").toString();
+	String title=req.getParameter("title").toString();
+	String desicription=req.getParameter("desicription").toString();
+	String price=req.getParameter("price").toString();
+	String offer=req.getParameter("offer").toString();
+	String salesprice=req.getParameter("salesprice").toString();
+	String neededqty=req.getParameter("neededqty").toString();
+	String action=req.getParameter("action").toString();
+	 int totalprice=Integer.parseInt(salesprice)*Integer.parseInt(neededqty);
+	 int tprice=Integer.parseInt(price)*Integer.parseInt(neededqty);
+	
+	 
+	if(offer.equals("0")) {
+		Booked obj=new Booked();
+		 obj.setEmail(email);
+		 obj.setMobile(mobile);
+		 obj.setTitle(title);
+		 obj.setDesicription(desicription);
+		 obj.setPrice(price);
+		 obj.setOffer("0");
+		 obj.setSalesprice(price);
+		 obj.setNeededqty(neededqty);
+		 obj.setAction(action);
+		 obj.setTotalprice(tprice);
+		 bookedRepo.save(obj);
+		 String clientemail=email;
+		 String subject="Order Confirmation from Flowers and Friendly Dogs";
+		 String message="Dear Client, \n Your Order successfully Booked Item Name"+title+"Price is"+price+"No Offer ,Your qty is"+neededqty+"Total Price Amount is"+tprice+".";
+		 SimpleMailMessage m=new SimpleMailMessage();
+		 m.setTo(clientemail);
+		 m.setSubject(subject);
+		 m.setText(message);
+		 javamailsender.send(m);
+		 
+		 
+	}
+	else {
+		
+	
+	 Booked obj=new Booked();
+	 obj.setEmail(email);
+	 obj.setMobile(mobile);
+	 obj.setTitle(title);
+	 obj.setDesicription(desicription);
+	 obj.setPrice(price);
+	 obj.setOffer(offer);
+	 obj.setSalesprice(salesprice);
+	 obj.setNeededqty(neededqty);
+	 obj.setAction(action);
+	 obj.setTotalprice(totalprice);
+	 bookedRepo.save(obj);
+	 String clientemail=email;
+	 String subject="Order Confirmation from Flowers and Friendly Dogs";
+	 String message="Dear Client, \n Your Order successfully Booked Item Name"+title+"Price is"+price+"Offer is "+offer+",Your qty is"+neededqty+"Total Price Amount is"+tprice+".";
+	 SimpleMailMessage m=new SimpleMailMessage();
+	 m.setTo(clientemail);
+	 m.setSubject(subject);
+	 m.setText(message);
+	 javamailsender.send(m);
+
+	}
+	
+	 return "redirect:/client/bookingandsalesdetails";
+	
+}
+
+
+
+@RequestMapping("admin/forbookingstatuschange")
+public String forbookingstatuschange(HttpServletRequest req) 
+
+{
+	String bookingid=req.getParameter("bookingid").toString();
+   String action=req.getParameter("action").toString();
+    String status=req.getParameter("status").toString();
+if(status.equals("Select")) {
+	return "redirect:/admin/bookingsalesdetails"; 
+}
+else {
+
+	bookedRepo.updateBookingStatus(Integer.parseInt(bookingid),status);
+	
+}
+	return "redirect:/admin/bookingsalesdetails"; 
+	 
+} 
+
+
+
+
+
+@RequestMapping("admin/bookingsalesdetails")
+public ModelAndView bookingsalesdetails(Model model) 
+
+{
+	List<Booked> obj=bookedRepo.findAll();
+	   model.addAttribute("orderd",obj); 
+	   return new ModelAndView("admin/bookingsalesdetails");
+
+} 
+
+
+@GetMapping("admin/export")
+
+public String exportToExcel(HttpServletResponse response) throws Exception
+
+{
+
+	response.setContentType("application/octet-stream");
+
+	SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+
+	String currentDateTime = dateFormatter.format(new Date());
+
+	String headerKey = "Content-Disposition";
+
+	String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+
+	response.setHeader(headerKey, headerValue);
+
+	List<Booked> bookedData =bookedRepo.findAll();
+
+	BookedDataExcelExport obj=new BookedDataExcelExport(bookedData);
+
+	obj.export(response);
+
+	return "redirect:/admin/bookingsalesdetails"; 
+
+}
+
+
+
+
+@RequestMapping("admin/addsalesdetails")
+public ModelAndView addsalesdetails() 
+
+{
+	
+
+	return new ModelAndView("admin/addsalesdetails"); 
+	 
+} 
+
+@RequestMapping("orderitem")
+public ModelAndView orderitem(HttpServletRequest htp) 
+
+{
+	
+
+	return new ModelAndView("client/clientindex"); 
+	 
+} 
+
+
+
+
+@RequestMapping("bookingsalesdetails")//url
+public ModelAndView bookingsalesdetails1() //function name
+{
+	return new ModelAndView("bookingsalesdetails"); // file name
+}
+
+
+@RequestMapping("bookingsalesdetailsdb")
+public String bookingsalesdetailsdb(HttpServletRequest rqu1) 
+  {
+	  String title=rqu1.getParameter("title").toString();
+	  String saledetails=rqu1.getParameter("saledetails").toString();
+	  String neededcout=rqu1.getParameter("neededcout").toString();
+	  String price=rqu1.getParameter("price").toString();
+	  String offerprice=rqu1.getParameter("offerprice").toString();
+	  
+	  
+	  /*ses.setAttribute("NAME",name);
+	  ses.setAttribute("NUMBER",number);
+	  ses.setAttribute("EMAIL",email);
+	  ses.setAttribute("LOCATION",location);
+	  ses.setAttribute("SUBJECT",subject);
+	  ses.setAttribute("DESCRIPTION",description);
+	  ses.setAttribute("ADDRESS",address);*/
+	   
+	  BookSalesDetails reg1= new BookSalesDetails();
+	  
+	  reg1.setTitle(title);
+	  reg1.setSaledetails(saledetails);
+	  reg1.setNeededcout(neededcout);
+	  reg1.setPrice(price);
+	  reg1.setOfferprice(offerprice);
+	  booksalesrepo.save(reg1);
+	 	  return "redirect:admin/bookingsalesdetails";
+	/*  return "redirect:/bookingsalesdetails";*/
+}  
+
+
+
+@RequestMapping("contact")
+public ModelAndView contact() 
+
+{
+	return new ModelAndView("contact"); 
+}
+
+
+
+@RequestMapping("logout")
+public ModelAndView logout() 
+
+{
+	return new ModelAndView("logout"); 
+}
+
+@RequestMapping("about")
+public ModelAndView about() 
+
+{
+	return new ModelAndView("about"); 
+} 
+
+}

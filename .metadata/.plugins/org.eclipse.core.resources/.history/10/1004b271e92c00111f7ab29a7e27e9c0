@@ -1,0 +1,10 @@
+package com.natural.FlowersofNatureandFriendlyAnimals.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.natural.FlowersofNatureandFriendlyAnimals.booking.Booked;
+
+
+public interface BookedRepo extends JpaRepository<Booked,Integer>{
+
+}

@@ -1,0 +1,39 @@
+package com.natural.FlowersofNatureandFriendlyAnimals.repo;
+
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import com.natural.FlowersofNatureandFriendlyAnimals.booking.Booked;
+
+public interface BookedRepo extends JpaRepository<Booked, Integer>{
+
+	@Query(value="select *  from booked where email= :email",nativeQuery = true)
+
+    List<Booked>  selectByEmail(String email);
+	
+	@Modifying
+
+	@Transactional
+
+	@Query("delete from Booked b where b.bookingid = :bookingid")
+
+	void deletebookingid(@Param("bookingid") int bookingid);
+	 
+	
+	
+	@Modifying
+
+	@Transactional
+
+	@Query("update  Booked set action=:status  where bookingid = :bookingid")
+
+	void updateBookingStatus(@Param("bookingid") int bookingid,@Param("status") String status);
+	
+ 
+}

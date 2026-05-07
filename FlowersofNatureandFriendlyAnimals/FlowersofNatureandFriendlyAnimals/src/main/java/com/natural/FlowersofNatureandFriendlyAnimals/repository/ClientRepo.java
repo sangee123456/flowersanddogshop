@@ -1,0 +1,14 @@
+package com.natural.FlowersofNatureandFriendlyAnimals.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.natural.FlowersofNatureandFriendlyAnimals.model.ClientRegister;
+
+public interface ClientRepo extends JpaRepository<ClientRegister, Integer> {
+	
+	@Query(value="select *  from client_register where email= :email and number= :number",nativeQuery = true)
+
+    public ClientRegister findByEmailMobile(String email,String number);
+ 
+}

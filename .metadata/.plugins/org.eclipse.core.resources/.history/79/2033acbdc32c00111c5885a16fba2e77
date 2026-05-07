@@ -1,0 +1,15 @@
+package com.natural.FlowersofNatureandFriendlyAnimals.booking;
+
+public class Booked {
+	int id;
+	String clientEmail;
+	String Mobile;
+	String Title;
+	String NameoftheSalesDetails; 
+	int NeededCount;
+	int Price;
+	int OfferPrice;
+	int TotalPrice;
+	String action;
+
+}

@@ -1,0 +1,82 @@
+package com.natural.FlowersofNatureandFriendlyAnimals.booking;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
+public class Booked {
+	@Id
+	@GeneratedValue
+	int bookingid;
+	String email;
+	String mobile;
+	String title;
+	String desicription;
+	String price;
+	String offer;
+	String salesprice;
+	public int getBookingid() {
+		return bookingid;
+	}
+	public void setBookingid(int bookingid) {
+		this.bookingid = bookingid;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getMobile() {
+		return mobile;
+	}
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getDesicription() {
+		return desicription;
+	}
+	public void setDesicription(String desicription) {
+		this.desicription = desicription;
+	}
+	public String getPrice() {
+		return price;
+	}
+	public void setPrice(String price) {
+		this.price = price;
+	}
+	public String getOffer() {
+		return offer;
+	}
+	public void setOffer(String offer) {
+		this.offer = offer;
+	}
+	public String getSalesprice() {
+		return salesprice;
+	}
+	public void setSalesprice(String salesprice) {
+		this.salesprice = salesprice;
+	}
+	public String getNeededqty() {
+		return neededqty;
+	}
+	public void setNeededqty(String neededqty) {
+		this.neededqty = neededqty;
+	}
+	public int getTotalprice() {
+		return totalprice;
+	}
+	public void setTotalprice(int totalprice) {
+		this.totalprice = totalprice;
+	}
+	String neededqty;
+	 int totalprice;
+
+}
